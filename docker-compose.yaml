@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+    app:
+        build:
+            context: ./app
+            dockerfile: Dockerfile
+        container_name: nestjs
+        ports:
+            - 80:3000
+        env_file:
+            - ./app/.env.production
+        depends_on:
+            db:
+                condition: service_healthy
+    db:
+        image: mysql
+        container_name: mysql
+        restart: always
+        volumes:
+            - ./mysql:/var/lib/mysql
+        ports:
+            - 81:3306
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+            MYSQL_DATABASE: banco
+            MYSQL_USER: usuario
+            MYSQL_PASSWORD: 123456
+        healthcheck:
+            test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+            interval: 5s
+            timeout: 20s
+            retries: 10
