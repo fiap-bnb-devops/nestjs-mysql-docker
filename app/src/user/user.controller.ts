@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -8,31 +9,37 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly userService: UserService,
+  ) { }
 
   @Get()
   index() {
-    return 'List users';
+
+    return this.userService.findAll();
+
   }
 
   @Get(':id')
-  show(@Param('id', ParseIntPipe) id: number) {
-    return `Show user ${id}`;
+  async show(
+    @Param('id', ParseIntPipe) userId: number,
+  ) {
+
+    return this.userService.findOne(userId);
+
   }
 
   @Post()
-  async create() {
-    return this.prisma.users.create({
-      data: {
-        name: 'Joao',
-        email: 'joao@hcode.com.br',
-        password: '123456',
-      },
-    });
+  async create(
+    @Body() data,
+  ) {
+
+    return this.userService.create(data);
+
   }
 
   @Patch(':id')
