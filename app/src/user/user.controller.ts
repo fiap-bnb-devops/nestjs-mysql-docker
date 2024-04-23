@@ -10,6 +10,8 @@ import {
   Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -35,7 +37,7 @@ export class UserController {
 
   @Post()
   async create(
-    @Body() data,
+    @Body() data: CreateUserDto,
   ) {
 
     return this.userService.create(data);
@@ -43,17 +45,27 @@ export class UserController {
   }
 
   @Patch(':id')
-  updatePartial() {
-    return `Update Patch`;
+  updatePartial(
+    @Param('id', ParseIntPipe) userId: number,
+    @Body() updateData: UpdateUserDto,
+  ) {
+    return this.userService.update(userId, updateData);
   }
 
   @Put(':id')
-  update() {
-    return `Update Put`;
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: UpdateUserDto,
+  ) {
+    return this.userService.update(id, body);
   }
 
   @Delete(':id')
-  delete() {
-    return `Delete`;
+  delete(
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+
+    return this.userService.delete(id);
+
   }
 }

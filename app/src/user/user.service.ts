@@ -4,6 +4,8 @@ https://docs.nestjs.com/providers#services
 
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -40,23 +42,11 @@ export class UserService {
 
     }
 
-    async create(data) {
-
-        if (!data.nameUser) {
-            throw new BadRequestException('Informe o nome do usuário');
-        }
-
-        if (!data.emailUser) {
-            throw new BadRequestException('Informe o email do usuário');
-        }
-
-        if (!data.passwordUser) {
-            throw new BadRequestException('Informe a senha do usuário');
-        }
+    async create(data: CreateUserDto) {
 
         const user = await this.prisma.users.findFirst({
             where: {
-                email: data.emailUser,
+                email: data.email,
             },
         });
 
@@ -68,9 +58,34 @@ export class UserService {
 
         return this.prisma.users.create({
             data: {
-                name: data.nameUser,
-                email: data.emailUser,
-                password: data.passwordUser,
+                name: data.name,
+                email: data.email,
+                password: data.password,
+            },
+        });
+
+    }
+
+    async update(id: number, data: UpdateUserDto) {
+
+        await this.findOne(id);
+
+        return this.prisma.users.update({
+            data,
+            where: {
+                id,
+            },
+        });
+
+    }
+
+    async delete(id: number) {
+
+        await this.findOne(id);
+
+        return this.prisma.users.delete({
+            where: {
+                id,
             },
         });
 
