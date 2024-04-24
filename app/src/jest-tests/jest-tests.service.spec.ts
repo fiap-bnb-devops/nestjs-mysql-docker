@@ -26,6 +26,16 @@ function multiplyNumber(x: number, y: number) {
 
 }
 
+function splitString(text: string) {
+
+  if (!text.length) {
+    return "Informe o texto";
+  }
+
+  return text.split('');
+
+}
+
 describe('JestTestsService', () => {
   let service: JestTestsService;
 
@@ -37,37 +47,79 @@ describe('JestTestsService', () => {
     service = module.get<JestTestsService>(JestTestsService);
   });
 
+  afterEach(() => {
+
+    service = null;
+
+  });
+
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  // Informar dois números válidos, funcione
-  // POSITIVO - Quando tudo dá certo
-  it('should multiply a number', () => {
+  describe('multiplyNumber function', () => {
 
-    const result = multiplyNumber(10, 5);
+    // Informar dois números válidos, funcione
+    // POSITIVO - Quando tudo dá certo
+    it('should multiply a number', () => {
 
-    expect(result).toBe(50);
+      const result = multiplyNumber(10, 5);
+
+      expect(result).toBe(50);
+
+    });
+
+    // Informar um número inválido, retorne um erro
+    // NEGATIVO - Quando algo ruim é fornecido
+    it('should return an error when provide invalid number', () => {
+
+      const result = multiplyNumber(Number('abc'), 5);
+
+      expect(result).toHaveProperty('message', 'Invalid Number');
+
+    });
+
+    // Informar uma string, quero que trate a informação
+    it('should multiply a number even a string', () => {
+
+      const result = multiplyNumber('2' as unknown as number, 9);
+
+      expect(result).toBe(18);
+
+    })
 
   });
 
-  // Informar um número inválido, retorne um erro
-  // NEGATIVO - Quando algo ruim é fornecido
-  it('should return an error when provide invalid number', () => {
+  describe('splitString function', () => {
 
-    const result = multiplyNumber(Number('abc'), 5);
+    it('should split a string', () => {
 
-    expect(result).toHaveProperty('message', 'Invalid Number');
+      const result = splitString('jest');
+
+      expect(result).toEqual(['j', 'e', 's', 't']);
+
+    });
+
+    it('should return a message when text is not provided', () => {
+
+      const response = splitString('');
+
+      expect(response).toBe('Informe o texto');
+
+    });
 
   });
 
-  // Informar uma string, quero que trate a informação
-  it('should multiply a number even a string', () => {
+  beforeAll(() => {
 
-    const result = multiplyNumber('2' as unknown as number, 9);
+    console.log("Conexão com Banco de Dados");
 
-    expect(result).toBe(18);
+  });
 
-  })
+  afterAll(() => {
+
+    console.log("Limpando conexão com Banco de Dados");
+
+  });
 
 });
