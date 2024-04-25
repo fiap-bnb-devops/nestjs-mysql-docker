@@ -48,6 +48,18 @@ export class UserService {
 
     async create(data: CreateUserDto) {
 
+        if (!data.name) {
+            throw new BadRequestException('Informe o nome');
+        }
+
+        if (!data.email) {
+            throw new BadRequestException('Informe o email');
+        }
+
+        if (!data.password) {
+            throw new BadRequestException('Informe a senha');
+        }
+
         const user = await this.prisma.users.findFirst({
             where: {
                 email: data.email,

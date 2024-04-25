@@ -44,6 +44,51 @@ describe('UserService', () => {
                     });
 
                 }),
+                findFirst: (({
+                    where,
+                }) => {
+
+                    if (where.email === 'rafael@hcode.com.br') {
+
+                        return Promise.resolve({
+                            id: 2,
+                            name: 'Rafael',
+                            email: 'rafa@hcode.com.br',
+                        });
+
+                    }
+
+                    return Promise.resolve(null);
+
+                }),
+                create: ((args) => {
+
+                    return Promise.resolve({
+                        id: 1,
+                        ...args.data,
+                    });
+
+                }),
+                update: (({
+                    data,
+                    where,
+                }) => {
+
+                    return Promise.resolve({
+                        ...where,
+                        ...data,
+                    });
+
+                }),
+                delete: (({
+                    where,
+                }) => {
+
+                    return Promise.resolve({
+                        ...where,
+                    });
+
+                }),
             },
         } as unknown as PrismaService;
 
@@ -106,6 +151,175 @@ describe('UserService', () => {
                 expect(err).toHaveProperty('response');
                 expect(err).toHaveProperty('status');
                 expect(err.status).toEqual(400);
+
+            }
+
+        });
+
+    });
+
+    describe('create method', () => {
+
+        it('should create a user with provided args', async () => {
+
+            const user = await service.create({
+                name: 'João',
+                email: 'joao@hcode.com.br',
+                password: '123456789',
+            });
+
+            expect(user).toHaveProperty('id');
+            expect(user).toHaveProperty('name');
+            expect(user).toHaveProperty('email');
+
+        });
+
+        it('should throw an exception when user is already created', async () => {
+
+            try {
+
+                await service.create({
+                    name: 'Rafa',
+                    email: 'rafael@hcode.com.br',
+                    password: '123456789',
+                });
+
+            } catch (err) {
+
+                expect(err).toHaveProperty('response');
+                expect(err).toHaveProperty('status', 400);
+
+            }
+
+        });
+
+        it('should throw an expection when name is not provided', async () => {
+
+            try {
+
+                await service.create({
+                    name: '',
+                    email: 'rafa@hcode.com.br',
+                    password: '123456789',
+                });
+
+            } catch (err) {
+
+                expect(err).toBeDefined();
+                expect(err).toHaveProperty('response');
+                expect(err).toHaveProperty('status', 400);
+
+            }
+
+        });
+
+        it('should throw an expection when email is not provided', async () => {
+
+            try {
+
+                await service.create({
+                    name: 'Rafael',
+                    email: '',
+                    password: '123456789',
+                });
+
+            } catch (err) {
+
+                expect(err).toBeDefined();
+                expect(err).toHaveProperty('response');
+                expect(err).toHaveProperty('status', 400);
+
+            }
+
+        });
+
+        it('should throw an expection when password is not provided', async () => {
+
+            try {
+
+                await service.create({
+                    name: 'Rafael',
+                    email: 'rafa@hcode.com.br',
+                    password: '',
+                });
+
+            } catch (err) {
+
+                expect(err).toBeDefined();
+                expect(err).toHaveProperty('response');
+                expect(err).toHaveProperty('status', 400);
+
+            }
+
+        });
+
+    });
+
+    describe('update method', () => {
+
+        it('should update an user', async () => {
+
+            const id = 1;
+            const name = 'Rafa Ribeiro';
+            const email = 'rafa@hcode.com.br';
+
+            const updatedUser = await service.update(id, {
+                name,
+                email,
+            });
+
+            expect(updatedUser).toHaveProperty('id', id);
+            expect(updatedUser).toHaveProperty('name', name);
+            expect(updatedUser).toHaveProperty('email', email);
+
+        });
+
+        it('should throw an exception when update an unexisted user', async () => {
+
+            try {
+
+                const id = 2;
+                const name = 'Rafa Ribeiro';
+                const email = 'rafa@hcode.com.br';
+
+                await service.update(id, {
+                    name,
+                    email,
+                });
+
+            } catch (err) {
+
+                expect(err).toHaveProperty('response');
+                expect(err).toHaveProperty('status', 404);
+
+            }
+
+        });
+
+    });
+
+    describe('delete method', () => {
+
+        it('should delete a user', async () => {
+
+            const id = 1;
+
+            const result = await service.delete(id);
+
+            expect(result).toHaveProperty('id', id);
+
+        });
+
+        it('should throw an exception when delete unexisted user', async () => {
+
+            try {
+
+                await service.delete(60);
+
+            } catch (err) {
+
+                expect(err).toHaveProperty('response');
+                expect(err).toHaveProperty('status', 404);
 
             }
 
