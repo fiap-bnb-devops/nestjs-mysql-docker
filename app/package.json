@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "prebuild": "npm test",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -20,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json --verbose",
     "prisma:pull": "prisma db pull --schema=./src/prisma/schema.prisma",
     "prisma:push": "prisma db push --schema=./src/prisma/schema.prisma",
+    "prisma:reset": "prisma db push --force-reset --schema=./src/prisma/schema.prisma",
     "prisma:gen": "prisma generate --schema=./src/prisma/schema.prisma",
     "postprisma:pull": "npm run prisma:gen"
   },
