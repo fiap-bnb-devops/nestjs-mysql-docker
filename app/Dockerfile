@@ -5,6 +5,7 @@ USER node
 WORKDIR /app
 
 COPY package*.json .
+COPY ./.env.production ./.env
 
 RUN npm ci
 

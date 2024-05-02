@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nestjs-api
+  labels:
+    app: nestjs-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nestjs-api
+  template:
+    metadata:
+      labels:
+        app: nestjs-api
+    spec:
+      containers:
+        - name: nestjs-api
+          image: docker.io/rafaribeiro98/nestjsmysqldocker:0.1.2
+          ports:
+            - containerPort: 3000
