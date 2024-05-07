@@ -11,7 +11,7 @@ RUN npm ci
 
 COPY --chown=node:node . .
 
-RUN npm run prisma:gen \
+RUN npm run prisma:push \
   && npm run build
 
 EXPOSE 3000
