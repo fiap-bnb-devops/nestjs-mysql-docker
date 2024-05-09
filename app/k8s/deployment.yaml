@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: nestjs-api
-          image: docker.io/rafaribeiro98/nestjsmysqldocker:0.1.4
+          image: 471112647960.dkr.ecr.us-east-2.amazonaws.com/nestjs-api-docker:0.1.6
           ports:
             - containerPort: 3000
