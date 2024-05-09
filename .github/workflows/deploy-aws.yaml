@@ -1,0 +1,14 @@
+name: Deploy to EKS
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy-aws-eks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Teste
+        run: echo OK_TESTE
