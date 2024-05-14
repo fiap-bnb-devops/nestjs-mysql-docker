@@ -24,10 +24,12 @@ jobs:
         run: aws eks list-clusters
 
       - name: Fazer o login no ECR
-        run: echo "Fazer o login no ECR"
+        uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build do Docker
-        run: echo "Build do Docker"
+      - name: Build e tag do Docker e push para o Amazon ECR
+        run: |
+          docker build --pull --rm -f "app\Dockerfile" -t 471112647960.dkr.ecr.us-east-2.amazonaws.com/nestjs-api-docker:0.1.8 "app"
+          docker push 471112647960.dkr.ecr.us-east-2.amazonaws.com/nestjs-api-docker:0.1.8
 
       - name: Upload da imagem Docker para ECR
         run: echo "Upload da imagem Docker para ECR"
