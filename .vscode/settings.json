@@ -1,0 +1,5 @@
+{
+    "yaml.schemas": {
+        "kubernetes://schema/cert-manager.io/v1@clusterissuer": "file:///c%3A/Users/rafaa/Desktop/nestjs-mysql-docker/app/k8s/issuer.yaml"
+    }
+}
