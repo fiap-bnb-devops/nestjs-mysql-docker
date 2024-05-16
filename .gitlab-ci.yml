@@ -1,0 +1,22 @@
+stages:
+  - aws-login
+  - docker-ecr
+  - kubernetes
+
+beginning:
+  stage: aws-login
+  script:
+    - echo "COMEÇANDO"
+
+starting:
+  stage: aws-login
+  script:
+    - echo "Iniciando servidor"
+
+docker:
+  stage: docker-ecr
+  script: echo "Logando no Docker"
+
+kubectl:
+  stage: kubernetes
+  script: echo "Configurando o Kubernetes"
