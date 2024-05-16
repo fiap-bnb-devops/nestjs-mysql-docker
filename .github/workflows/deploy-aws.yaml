@@ -63,4 +63,4 @@ jobs:
           export IMAGE_TAG=$IMAGE_TAG
           export ECR_REGISTRY=$ECR_REGISTRY
           export ECR_REPOSITORY=$ECR_REPOSITORY
-          envsubst < ./app/k8s/deployment.yaml
+          envsubst < ./app/k8s/deployment.yaml | kubectl apply -f -
