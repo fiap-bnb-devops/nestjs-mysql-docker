@@ -27,20 +27,17 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build e tag do Docker e push para o Amazon ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          docker build --pull --rm -f ./app/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG "app"
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
-      - name: Upload da imagem Docker para ECR
-        run: echo "Upload da imagem Docker para ECR"
+      # - name: Build e tag do Docker e push para o Amazon ECR
+      #   env:
+      #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      #     ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+      #     IMAGE_TAG: ${{ github.sha }}
+      #   run: |
+      #     docker build --pull --rm -f ./app/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG "app"
+      #     docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - name: Configurar o Kubernetes
-        run: echo "Configurar o Kubernetes"
+        run: kubectl version
 
       - name: Aplicar o arquivo deployment.yaml com a nova imagem
         run: echo "Aplicar o arquivo deployment.yaml com a nova imagem"

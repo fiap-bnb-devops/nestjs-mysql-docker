@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: nestjs-api
-          image: 471112647960.dkr.ecr.us-east-2.amazonaws.com/nestjs-api-docker:aee35a65bd897e9f6be01ecb2b856c5c0d68996a
+          image: 471112647960.dkr.ecr.us-east-2.amazonaws.com/nestjs-api-docker:cfcfff219911a6de2c7bad0187024ec33be41bd8
           ports:
             - containerPort: 3000
