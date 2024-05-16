@@ -44,7 +44,7 @@ jobs:
 
       - name: Testar kubeconfig
         run: |
-          cat ./secrets/kubeconfig
+          cat ./app/k8s/kubeconfig
 
       - name: Criar arquivo config do Kubernetes
         run: mkdir -p ~/.kube && mv ./app/k8s/kubeconfig ~/.kube/config
