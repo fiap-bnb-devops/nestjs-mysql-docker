@@ -48,9 +48,9 @@ jobs:
       - name: Testar Kubernetes
         run: |
           kubectl config view
+          kubectl get pods
 
       #kubectl get contexts
-      #kubectl get pods
 
       - name: Aplicar o arquivo deployment.yaml com a nova imagem
         run: echo "Aplicar o arquivo deployment.yaml com a nova imagem"
