@@ -40,8 +40,7 @@ jobs:
         env:
           KUBECONFIG_PASSPHRASE: ${{ secrets.KUBECONFIG_PASSPHRASE }}
         run: |
-          mkdir ./secrets
-          gpg --quiet --batch --yes --decrypt --passphrase="$KUBECONFIG_PASSPHRASE" --output ./secrets/kubeconfig ./app/k8s/kubeconfig.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$KUBECONFIG_PASSPHRASE" --output ./app/k8s/kubeconfig ./app/k8s/kubeconfig.gpg
 
       - name: Testar kubeconfig
         run: |
