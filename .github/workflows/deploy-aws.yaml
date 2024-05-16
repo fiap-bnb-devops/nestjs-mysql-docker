@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - master
+env:
+  IMAGE_TAG: ${{ github.sha }}
+  ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
 jobs:
   deploy-aws-eks:
     runs-on: ubuntu-latest
@@ -27,24 +31,18 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      # - name: Build e tag do Docker e push para o Amazon ECR
-      #   env:
-      #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-      #     ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-      #     IMAGE_TAG: ${{ github.sha }}
-      #   run: |
-      #     docker build --pull --rm -f ./app/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG "app"
-      #     docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: Build e tag do Docker e push para o Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          docker build --pull --rm -f ./app/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG "app"
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - name: Descriptografar arquivo kubeconfig
         env:
           KUBECONFIG_PASSPHRASE: ${{ secrets.KUBECONFIG_PASSPHRASE }}
         run: |
           gpg --quiet --batch --yes --decrypt --passphrase="$KUBECONFIG_PASSPHRASE" --output ./app/k8s/kubeconfig ./app/k8s/kubeconfig.gpg
-
-      - name: Testar kubeconfig
-        run: |
-          cat ./app/k8s/kubeconfig
 
       - name: Criar arquivo config do Kubernetes
         run: mkdir -p ~/.kube && mv ./app/k8s/kubeconfig ~/.kube/config
@@ -61,4 +59,8 @@ jobs:
           kubectl get pods
 
       - name: Aplicar o arquivo deployment.yaml com a nova imagem
-        run: echo "Aplicar o arquivo deployment.yaml com a nova imagem"
+        run: |
+          export IMAGE_TAG=$IMAGE_TAG
+          export ECR_REGISTRY=$ECR_REGISTRY
+          export ECR_REPOSITORY=$ECR_REPOSITORY
+          envsubst < ./app/k8s/deployment.yaml
