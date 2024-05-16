@@ -28,8 +28,8 @@ jobs:
 
       - name: Build e tag do Docker e push para o Amazon ECR
         run: |
-          docker build --pull --rm -f ./app/Dockerfile -t 471112647960.dkr.ecr.us-east-2.amazonaws.com/nestjs-api-docker:${{ github.sha }} "app"
-          docker push 471112647960.dkr.ecr.us-east-2.amazonaws.com/nestjs-api-docker:${{ github.sha }}
+          docker build --pull --rm -f ./app/Dockerfile -t ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }} "app"
+          docker push ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
 
       - name: Upload da imagem Docker para ECR
         run: echo "Upload da imagem Docker para ECR"
