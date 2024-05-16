@@ -36,8 +36,13 @@ jobs:
       #     docker build --pull --rm -f ./app/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG "app"
       #     docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-      - name: Configurar o Kubernetes
-        run: kubectl version
+      - name: Criar arquivo config do Kubernetes
+        run: mkdir -p ~/.kube && mv ./app/k8s/kubeconfig ~/.kube/config
+
+      - name: Testar Kubernetes
+        run: |
+          kubectl get contexts
+          kubectl get pods
 
       - name: Aplicar o arquivo deployment.yaml com a nova imagem
         run: echo "Aplicar o arquivo deployment.yaml com a nova imagem"
