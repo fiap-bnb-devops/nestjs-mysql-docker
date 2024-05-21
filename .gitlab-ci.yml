@@ -52,11 +52,14 @@ kubectl:
     - kubeconfig
   variables:
     KUBECONFIG: ./app/k8s/kubeconfig
+    DEPLOYMENT_FILE: ./app/k8s/deployment.yaml
   script:
     - cat $KUBECONFIG
     - kubectl --kubeconfig $KUBECONFIG get pods
     - export IMAGE_TAG=$IMAGE_TAG
     - export ECR_REGISTRY=$ECR_REGISTRY
     - export ECR_REPOSITORY=$ECR_REPOSITORY
-    - envsubst < ./app/k8s/deployment.yaml | kubectl apply -f -
-    #- kubectl --kubeconfig $KUBECONFIG apply -f ./app/k8s/deployment.yaml
+    - sed -i 's/$IMAGE_TAG/'${IMAGE_TAG}'/g' $DEPLOYMENT_FILE
+    - sed -i 's/$ECR_REGISTRY/'${ECR_REGISTRY}'/g' $DEPLOYMENT_FILE
+    - sed -i 's/$ECR_REPOSITORY/'${ECR_REPOSITORY}'/g' $DEPLOYMENT_FILE
+    - kubectl --kubeconfig $KUBECONFIG apply -f $DEPLOYMENT_FILE
