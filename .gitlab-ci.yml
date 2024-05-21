@@ -40,3 +40,9 @@ kubectl:
   script:
     - gpg --quiet --batch --yes --decrypt --passphrase="$KUBECONFIG_PASSPHRASE" --output ./app/k8s/kubeconfig ./app/k8s/kubeconfig.gpg
     - cat ./app/k8s/kubeconfig
+
+kubernetes:
+  image: matshareyourscript/aws-helm-kubectl
+  script:
+    - kubectl version --short
+    - cat ./app/k8s/kubeconfig
