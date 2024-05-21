@@ -1,6 +1,7 @@
 stages:
   - aws-login
   - docker-ecr
+  - kubeconfig
   - kubernetes
 
 variables:
@@ -30,7 +31,7 @@ docker:
     # - docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
 kubeconfig:
-  stage: kubernetes
+  stage: kubeconfig
   image: docker:latest
   before_script:
     - apk update
@@ -40,10 +41,15 @@ kubeconfig:
   script:
     - gpg --quiet --batch --yes --decrypt --passphrase="$KUBECONFIG_PASSPHRASE" --output ./app/k8s/kubeconfig ./app/k8s/kubeconfig.gpg
     - cat ./app/k8s/kubeconfig
+  artifacts:
+    paths:
+      - ./app/k8s/kubeconfig
 
 kubectl:
   stage: kubernetes
   image: matshareyourscript/aws-helm-kubectl
+  dependencies:
+    - kubeconfig
   script:
     - cat ./app/k8s/kubeconfig
     - kubectl --kubeconfig ./app/k8s/kubeconfig version --short
