@@ -45,5 +45,5 @@ kubectl:
   stage: kubernetes
   image: matshareyourscript/aws-helm-kubectl
   script:
-    - kubectl version --short
     - cat ./app/k8s/kubeconfig
+    - kubectl --kubeconfig ./app/k8s/kubeconfig version --short
