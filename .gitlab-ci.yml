@@ -52,4 +52,4 @@ kubectl:
     - kubeconfig
   script:
     - cat ./app/k8s/kubeconfig
-    - kubectl --kubeconfig ./app/k8s/kubeconfig version --short
+    - kubectl --kubeconfig ./app/k8s/kubeconfig get pods
