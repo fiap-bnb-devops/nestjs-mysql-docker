@@ -25,13 +25,18 @@ docker:
     - aws --version
     - aws ecr get-login-password | docker login --username AWS --password-stdin $ECR_REGISTRY
   script:
-    - docker build --pull --rm -f ./app/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG "app"
+    # - docker build --pull --rm -f ./app/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG "app"
     - docker image list
-    - docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+    # - docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
 kubectl:
   stage: kubernetes
   image: docker:latest
+  before_script:
+    - apk update
+    - apk fetch gnupg
+    - apk add gnupg
+    - gpg --list-keys
   script:
     - gpg --quiet --batch --yes --decrypt --passphrase="$KUBECONFIG_PASSPHRASE" --output ./app/k8s/kubeconfig ./app/k8s/kubeconfig.gpg
     - cat ./app/k8s/kubeconfig
