@@ -29,7 +29,7 @@ docker:
     - docker image list
     # - docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-kubectl:
+kubeconfig:
   stage: kubernetes
   image: docker:latest
   before_script:
@@ -41,7 +41,8 @@ kubectl:
     - gpg --quiet --batch --yes --decrypt --passphrase="$KUBECONFIG_PASSPHRASE" --output ./app/k8s/kubeconfig ./app/k8s/kubeconfig.gpg
     - cat ./app/k8s/kubeconfig
 
-kubernetes:
+kubectl:
+  stage: kubernetes
   image: matshareyourscript/aws-helm-kubectl
   script:
     - kubectl version --short
