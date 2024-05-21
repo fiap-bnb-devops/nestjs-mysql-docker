@@ -31,4 +31,7 @@ docker:
 
 kubectl:
   stage: kubernetes
-  script: echo "Configurando o Kubernetes"
+  image: docker:latest
+  script:
+    - gpg --quiet --batch --yes --decrypt --passphrase="$KUBECONFIG_PASSPHRASE" --output ./app/k8s/kubeconfig ./app/k8s/kubeconfig.gpg
+    - cat ./app/k8s/kubeconfig
