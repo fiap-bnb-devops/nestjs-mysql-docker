@@ -44,8 +44,10 @@ pipeline {
         }
 
         stage('Deploy do Kubernetes no EKS') {
-            steps {
-                echo "Deploy do Kubernetes no EKS"
+            steps {                
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
+                    bat 'kubectl get pods'
+                }
             }
         }
     }
