@@ -1,5 +1,11 @@
 pipeline {
 
+    enviroment {
+        amazonEcr = credentials('AMAZON_ECR')
+        awsRegion = credentials('AWS_REGION')
+        dockerImage = ''
+    }
+
     agent any
     
     stages {
@@ -21,17 +27,19 @@ pipeline {
 
         stage('Build do Docker') {
             steps {
-                withCredentials([string(credentialsId: 'AMAZON_ECR', variable: 'AMAZON_ECR')]) {
-                    script {
-                        docker.build("$AMAZON_ECR:${env.GIT_COMMIT}", '-f ./app/Dockerfile ./app')
-                    }
+                script {
+                    dockerImage = docker.build("$amazonEcr:${env.GIT_COMMIT}", '-f ./app/Dockerfile ./app')
                 }
             }
         }
 
         stage('Push do Docker para o ECR') {
             steps {
-                echo "Push do Docker para o ECR"
+                script {
+                    docker.withRegistry("https://$amazonEcr", "ecr:$awsRegion:aws-access-key") {
+                        dockerImage.push()
+                    }
+                }            
             }
         }
 
