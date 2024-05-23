@@ -28,7 +28,7 @@ pipeline {
         stage('Build do Docker') {
             steps {
                 script {
-                    dockerImage = docker.build($amazonEcr + ":${env.GIT_COMMIT}", '-f ./app/Dockerfile ./app')
+                    dockerImage = docker.build("$amazonEcr:${env.GIT_COMMIT}", '-f ./app/Dockerfile ./app')
                 }
             }
         }
@@ -36,7 +36,7 @@ pipeline {
         stage('Push do Docker para o ECR') {
             steps {
                 script {
-                    docker.withRegistry("https://" + $amazonEcr + "", "ecr:" + $awsRegion + ":aws-access-key") {
+                    docker.withRegistry("https://$amazonEcr", "ecr:$awsRegion:aws-access-key") {
                         dockerImage.push()
                     }
                 }            
