@@ -23,7 +23,7 @@ pipeline {
 
                 }
             }
-        }*/
+        }
 
         stage('Build do Docker') {
             steps {
@@ -41,13 +41,13 @@ pipeline {
                     }
                 }            
             }
-        }
+        }*/
 
         stage('Deploy do Kubernetes no EKS') {
             steps {
                 withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-access-key', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
 
-                    bat 'aws eks list-clusters --region $awsRegion'
+                    bat "aws eks list-clusters --region $awsRegion"
 
                     withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
                         bat 'kubectl get pods'
