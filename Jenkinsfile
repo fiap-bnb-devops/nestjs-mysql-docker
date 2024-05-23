@@ -3,7 +3,7 @@ pipeline {
     agent any
     
     stages {
-        stage('Atualizar arquivo .env') {
+        /*stage('Atualizar arquivo .env') {
             steps {
                 withCredentials([
                     string(credentialsId: 'DATABASE_USER', variable: 'DATABASE_USER'),
@@ -17,7 +17,7 @@ pipeline {
 
                 }
             }
-        }
+        }*/
 
         stage('Build do Docker') {
             steps {
