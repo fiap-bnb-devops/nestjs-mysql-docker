@@ -1,6 +1,6 @@
 pipeline {
 
-    enviroment {
+    environment {
         amazonEcr = credentials('AMAZON_ECR')
         awsRegion = credentials('AWS_REGION')
         dockerImage = ''
