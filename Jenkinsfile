@@ -11,9 +11,17 @@ pipeline {
             }
         }
 
-        stage('Push do Docker para o ECR') {}
+        stage('Push do Docker para o ECR') {
+            steps {
+                echo "Push do Docker para o ECR"
+            }
+        }
 
-        stage('Deploy do Kubernetes no EKS') {}
+        stage('Deploy do Kubernetes no EKS') {
+            steps {
+                echo "Deploy do Kubernetes no EKS"
+            }
+        }
     }
 
 }
