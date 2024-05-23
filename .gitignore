@@ -1,3 +1,4 @@
 jenkins/
 mysql/
 mysql_test/
+.terraform/

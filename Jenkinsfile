@@ -9,7 +9,7 @@ pipeline {
     agent any
     
     stages {
-        /*stage('Atualizar arquivo .env') {
+        stage('Atualizar arquivo .env') {
             steps {
                 withCredentials([
                     string(credentialsId: 'DATABASE_USER', variable: 'DATABASE_USER'),
@@ -41,7 +41,7 @@ pipeline {
                     }
                 }            
             }
-        }*/
+        }
 
         stage('Deploy do Kubernetes no EKS') {
             steps {
@@ -51,6 +51,7 @@ pipeline {
 
                     withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
                         bat 'kubectl get pods'
+                        bat 'kubectl apply -f ./app/k8s/deployment.yaml'
                     }
 
                 }
