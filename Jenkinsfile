@@ -1,9 +1,11 @@
 pipeline {
 
     environment {
-        amazonEcr = credentials('AMAZON_ECR')
+        ecrRegistry = credentials('ECR_REGISTRY')
+        ecrRepository = credentials('ECR_REPOSITORY')
         awsRegion = credentials('AWS_REGION')
         dockerImage = ''
+        deploymentFile = './app/k8s/deployment.yaml'
     }
 
     agent any
@@ -28,7 +30,7 @@ pipeline {
         stage('Build do Docker') {
             steps {
                 script {
-                    dockerImage = docker.build("$amazonEcr:${env.GIT_COMMIT}", '-f ./app/Dockerfile ./app')
+                    dockerImage = docker.build("$ecrRegistry/$ecrRepository:${env.GIT_COMMIT}", '-f ./app/Dockerfile ./app')
                 }
             }
         }
@@ -36,7 +38,7 @@ pipeline {
         stage('Push do Docker para o ECR') {
             steps {
                 script {
-                    docker.withRegistry("https://$amazonEcr", "ecr:$awsRegion:aws-access-key") {
+                    docker.withRegistry("https://$ecrRegistry/$ecrRepository", "ecr:$awsRegion:aws-access-key") {
                         dockerImage.push()
                     }
                 }            
@@ -51,7 +53,11 @@ pipeline {
 
                     withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubeconfig', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
                         sh 'kubectl get pods'
-                        // sh 'kubectl apply -f ./app/k8s/deployment.yaml'
+                        sh "sed -i 's/ECR_REGISTRY/'$ecrRegistry'/g' $deploymentFile"
+                        sh "sed -i 's/ECR_REPOSITORY/'$ecrRepository'/g' $deploymentFile"
+                        sh "sed -i 's/IMAGE_TAG/'${env.GIT_COMMIT}'/g' $deploymentFile"
+                        sh "cat $deploymentFile"
+                        sh "kubectl apply -f $deploymentFile"
                     }
 
                 }
