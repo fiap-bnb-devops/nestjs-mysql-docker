@@ -1,4 +1,6 @@
 jenkins/
 mysql/
 mysql_test/
+postgress/
+sonarqube/
 .terraform/
