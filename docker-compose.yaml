@@ -79,11 +79,20 @@ services:
             POSTGRES_USER: sonar
             POSTGRES_PASSWORD: sonar
         volumes:
+<<<<<<< HEAD
             - ./postgresql:/var/lib/postgresql
             - ./postgresql_data:/var/lib/postgresql/data
+=======
+            - ./postgress/postgresql:/var/lib/postgresql
+            - ./postgress/postgresql_data:/var/lib/postgresql/data
+>>>>>>> 3e5eff3e6b846de56f20d12cf136e6a3a19f2afb
 volumes:
     sonarqube_data:
     sonarqube_extensions:
     sonarqube_logs:
     postgresql:
     postgresql_data:
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 3e5eff3e6b846de56f20d12cf136e6a3a19f2afb
