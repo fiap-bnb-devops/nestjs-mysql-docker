@@ -6,7 +6,7 @@ import { execSync } from "child_process";
 
 describe('UserController (e2e)', () => {
 
-    const databaseTestUrl = 'mysql://usuario_teste:123456789@localhost:82/banco_teste';
+    const databaseTestUrl = process.env.DATABASE_TEST_URL;
     let app: INestApplication;
 
     const name = 'Usuário Teste';

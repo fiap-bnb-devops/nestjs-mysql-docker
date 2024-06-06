@@ -2,3 +2,9 @@ jenkins/
 mysql/
 mysql_test/
 .terraform/
+postgresql/
+postgresql_data/
+sonarqube_data/
+sonarqube_extensions/
+sonarqube_logs/
+.scannerwork/

@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package*.json .
 COPY ./.env.production ./.env
 
-RUN npm ci
+RUN npm ci --ignore-scripts
 
 COPY --chown=node:node . .
 
