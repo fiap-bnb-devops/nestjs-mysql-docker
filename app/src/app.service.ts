@@ -3,6 +3,6 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class AppService {
   getHello(): string {
-    return 'Testando o SonarCloud';
+    return 'Testando o SonarCloud no GitHub Actions';
   }
 }
