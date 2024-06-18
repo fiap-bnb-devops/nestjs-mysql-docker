@@ -3,6 +3,7 @@ import { UserController } from './user.controller';
 import { PrismaModule } from '../prisma/prisma.module';
 import { UserService } from './user.service';
 import { RabbitmqService } from 'src/rabbitmq/rabbitmq.service';
+import { RedisCacheService } from 'src/redis-cache/redis-cache.service';
 
 @Module({
   imports: [PrismaModule],
@@ -10,6 +11,7 @@ import { RabbitmqService } from 'src/rabbitmq/rabbitmq.service';
   providers: [
     UserService,
     RabbitmqService,
+    RedisCacheService,
   ],
 })
 export class UserModule {

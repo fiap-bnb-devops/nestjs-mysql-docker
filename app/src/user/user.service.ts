@@ -6,21 +6,35 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { RedisCacheService } from 'src/redis-cache/redis-cache.service';
 
 @Injectable()
 export class UserService {
 
-    constructor(private readonly prisma: PrismaService) { }
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly redisService: RedisCacheService,
+    ) { }
 
     async findAll() {
 
-        return this.prisma.users.findMany({
+        const usersCache = await this.redisService.getFromRedis('users');
+
+        if (usersCache) {
+            return usersCache;
+        }
+
+        const users = await this.prisma.users.findMany({
             select: {
                 id: true,
                 name: true,
                 email: true,
             },
         });
+
+        await this.redisService.saveRedis('users', users, 30);
+
+        return users;
 
     }
 
