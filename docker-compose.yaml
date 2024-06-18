@@ -59,6 +59,17 @@ services:
         volumes:
             - ./jenkins:/var/jenkins_home
             - ./jenkins/docker.sock:/var/run/docker.sock
+    rabbitmq_nest:
+        image: rabbitmq:3-management
+        container_name: rabbitmq_nest
+        ports:
+            - 5672:5672
+            - 15672:15672
+        volumes:
+            - ./rabbitmq:/var/lib/rabbitmq
+        environment:
+            - RABBITMQ_DEFAULT_USER=rabbit
+            - RABBITMQ_DEFAULT_PASS=rabbit
     sonarqube:
         image: sonarqube:community
         depends_on:

@@ -48,36 +48,48 @@ export class UserService {
 
     async create(data: CreateUserDto) {
 
-        if (!data.name) {
-            throw new BadRequestException('Informe o nome');
-        }
+        return new Promise((resolve, reject) => {
 
-        if (!data.email) {
-            throw new BadRequestException('Informe o email');
-        }
+            setTimeout(async () => {
 
-        if (!data.password) {
-            throw new BadRequestException('Informe a senha');
-        }
+                if (!data.name) {
+                    throw new BadRequestException('Informe o nome');
+                }
 
-        const user = await this.prisma.users.findFirst({
-            where: {
-                email: data.email,
-            },
-        });
+                if (!data.email) {
+                    throw new BadRequestException('Informe o email');
+                }
 
-        if (user) {
+                if (!data.password) {
+                    throw new BadRequestException('Informe a senha');
+                }
 
-            throw new BadRequestException('Usuário já cadastrado');
+                /*const user = await this.prisma.users.findFirst({
+                    where: {
+                        email: data.email,
+                    },
+                });
+        
+                if (user) {
+        
+                    throw new BadRequestException('Usuário já cadastrado');
+        
+                }*/
 
-        }
+                const user = await this.prisma.users.create({
+                    data: {
+                        name: data.name,
+                        email: data.email,
+                        password: data.password,
+                    },
+                });
 
-        return this.prisma.users.create({
-            data: {
-                name: data.name,
-                email: data.email,
-                password: data.password,
-            },
+                console.log("CRIANDO USUARIO");
+
+                resolve(user);
+
+            }, 10000);
+
         });
 
     }

@@ -12,11 +12,13 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { RabbitmqService } from 'src/rabbitmq/rabbitmq.service';
 
 @Controller('user')
 export class UserController {
   constructor(
     private readonly userService: UserService,
+    private readonly rabbitmqService: RabbitmqService,
   ) { }
 
   @Get()
@@ -41,6 +43,25 @@ export class UserController {
   ) {
 
     return this.userService.create(data);
+
+  }
+
+  @Post('many')
+  async createMany(
+    @Body() dataArray: CreateUserDto[],
+  ) {
+
+    // console.log("CHANNEL: ", this.rabbitmqService.channel);
+
+    await Promise.all(dataArray.map(async (data) => {
+
+      await this.rabbitmqService.publishInQueue('create-user', JSON.stringify(data))
+
+      // await this.userService.create(data);
+
+    }));
+
+    return true;
 
   }
 

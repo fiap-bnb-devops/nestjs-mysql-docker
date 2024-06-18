@@ -1,6 +1,3 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { JestTestsService } from './jest-tests.service';
-
 function multiplyNumber(x: number, y: number) {
 
   x = Number(x);
@@ -37,25 +34,6 @@ function splitString(text: string) {
 }
 
 describe('JestTestsService', () => {
-  let service: JestTestsService;
-
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [JestTestsService],
-    }).compile();
-
-    service = module.get<JestTestsService>(JestTestsService);
-  });
-
-  afterEach(() => {
-
-    service = null;
-
-  });
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
 
   describe('multiplyNumber function', () => {
 
